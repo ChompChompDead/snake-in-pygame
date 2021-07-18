@@ -8,6 +8,9 @@ maxFPS = 60
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((500, 500))
 
+# title
+pygame.display.set_caption("Snake")
+
 # updating screen
 while True:
     for event in pygame.event.get():
