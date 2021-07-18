@@ -21,4 +21,4 @@ while True:
             sys.exit()
     screen.fill((90, 219, 124))
     pygame.display.update()   
-    clock.tick(maxFPS)     
+    clock.tick(maxFPS)
