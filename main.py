@@ -4,9 +4,11 @@ import sys
 pygame.init()
 
 # variables
+cellSize = 20
+cellAmount = 20
 maxFPS = 60
 clock = pygame.time.Clock()
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((cellAmount * cellSize, cellAmount * cellSize))
 
 # title
 pygame.display.set_caption("Snake")
