@@ -8,7 +8,7 @@ pygame.init()
 class Snake:
     def __init__(self):
         self.movementDirection = Vector2(1, 0)
-        self.snake = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
+        self.snake = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
         self.expanding = False
 
     def createSnake(self):
@@ -35,14 +35,16 @@ class Snake:
 #fruit class
 class Fruit:
     def __init__(self):
-        self.x = random.randint(0, cellAmount - 1)
-        self.y = random.randint(0, cellAmount - 1)
-        self.position = Vector2(self.x, self.y)
+        self.randomize()
 
     def createFruit(self):
         fruitShape = pygame.Rect(int(self.position.x * cellSize), int(self.position.y * cellSize), cellSize, cellSize)
         pygame.draw.rect(screen, (255,65,20), fruitShape)
 
+    def randomize(self):
+        self.x = random.randint(0, cellAmount - 1)
+        self.y = random.randint(0, cellAmount - 1)
+        self.position = Vector2(self.x, self.y)
 #main class
 class Main:
     def __init__(self):
@@ -52,11 +54,22 @@ class Main:
     def update(self):
         self.snake.moveSnake()
         self.checkCollision()
+        self.checkFail()
 
     def checkCollision(self):
         if self.snake.snake[0] == self.fruit.position:
+            self.fruit.randomize()
             self.snake.expand()
 
+    def checkFail(self):
+        if not 0 <= self.snake.snake[0].x < cellAmount or not 0 <= self.snake.snake[0].x < cellAmount:
+            pygame.quit()
+            sys.exit()
+            
+        for block in self.snake.snake[1:]:
+            if block == self.snake.snake[0]:
+                pygame.quit()
+                sys.exit()
 # variables
 cellSize = 20
 cellAmount = 20
@@ -64,7 +77,7 @@ maxFPS = 60
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((cellAmount * cellSize, cellAmount * cellSize))
 screenUpdate = pygame.USEREVENT
-pygame.time.set_timer(screenUpdate, 200)
+pygame.time.set_timer(screenUpdate, 150)
 main = Main()
 # title
 pygame.display.set_caption("Snake")
