@@ -9,6 +9,7 @@ class Snake:
     def __init__(self):
         self.movementDirection = Vector2(1, 0)
         self.snake = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
+        self.expanding = False
 
     def createSnake(self):
         for block in self.snake:
@@ -18,9 +19,19 @@ class Snake:
             pygame.draw.rect(screen, (80,120,240), snakeBlock)
 
     def moveSnake(self):
-        snakeClone = self.snake[:-1]
-        snakeClone.insert(0, snakeClone[0] + self.movementDirection)
-        self.snake = snakeClone
+        if self.expanding == True:
+            snakeClone = self.snake[:]
+            snakeClone.insert(0, snakeClone[0] + self.movementDirection)
+            self.snake = snakeClone
+            self.expanding = False
+        else:
+            snakeClone = self.snake[:-1]
+            snakeClone.insert(0, snakeClone[0] + self.movementDirection)
+            self.snake = snakeClone
+
+    def expand(self):
+        self.expanding = True
+
 #fruit class
 class Fruit:
     def __init__(self):
@@ -32,6 +43,20 @@ class Fruit:
         fruitShape = pygame.Rect(int(self.position.x * cellSize), int(self.position.y * cellSize), cellSize, cellSize)
         pygame.draw.rect(screen, (255,65,20), fruitShape)
 
+#main class
+class Main:
+    def __init__(self):
+        self.snake = Snake()
+        self.fruit = Fruit()
+
+    def update(self):
+        self.snake.moveSnake()
+        self.checkCollision()
+
+    def checkCollision(self):
+        if self.snake.snake[0] == self.fruit.position:
+            self.snake.expand()
+
 # variables
 cellSize = 20
 cellAmount = 20
@@ -40,9 +65,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((cellAmount * cellSize, cellAmount * cellSize))
 screenUpdate = pygame.USEREVENT
 pygame.time.set_timer(screenUpdate, 200)
-fruit = Fruit()
-snake = Snake()
-
+main = Main()
 # title
 pygame.display.set_caption("Snake")
 
@@ -53,19 +76,23 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == screenUpdate:
-            snake.moveSnake()
+            main.update()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
-                snake.movementDirection = Vector2(0, -1)
+                if main.snake.movementDirection.y != 1:
+                    main.snake.movementDirection = Vector2(0, -1)
             if event.key == pygame.K_a:
-                snake.movementDirection = Vector2(-1, 0)
+                if main.snake.movementDirection.x != 1:
+                    main.snake.movementDirection = Vector2(-1, 0)
             if event.key == pygame.K_s:
-                snake.movementDirection = Vector2(0, 1)
+                if main.snake.movementDirection.y != -1:
+                    main.snake.movementDirection = Vector2(0, 1)
             if event.key == pygame.K_d:
-                snake.movementDirection = Vector2(1, 0)
-                
+                if main.snake.movementDirection.x != -1:
+                    main.snake.movementDirection = Vector2(1, 0)
+
     screen.fill((90, 219, 124))
-    fruit.createFruit()
-    snake.createSnake()
+    main.fruit.createFruit()
+    main.snake.createSnake()
     pygame.display.update()   
     clock.tick(maxFPS)
