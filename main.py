@@ -45,11 +45,16 @@ class Fruit:
         self.x = random.randint(0, cellAmount - 1)
         self.y = random.randint(0, cellAmount - 1)
         self.position = Vector2(self.x, self.y)
+
 #main class
 class Main:
     def __init__(self):
         self.snake = Snake()
         self.fruit = Fruit()
+
+    def drawObjects(self):
+        self.fruit.createFruit()
+        self.snake.createSnake()
 
     def update(self):
         self.snake.moveSnake()
@@ -70,6 +75,7 @@ class Main:
             if block == self.snake.snake[0]:
                 pygame.quit()
                 sys.exit()
+
 # variables
 cellSize = 20
 cellAmount = 20
@@ -79,6 +85,7 @@ screen = pygame.display.set_mode((cellAmount * cellSize, cellAmount * cellSize))
 screenUpdate = pygame.USEREVENT
 pygame.time.set_timer(screenUpdate, 150)
 main = Main()
+
 # title
 pygame.display.set_caption("Snake")
 
@@ -105,7 +112,6 @@ while True:
                     main.snake.movementDirection = Vector2(1, 0)
 
     screen.fill((90, 219, 124))
-    main.fruit.createFruit()
-    main.snake.createSnake()
+    main.drawObjects()
     pygame.display.update()   
     clock.tick(maxFPS)
