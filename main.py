@@ -67,7 +67,7 @@ class Main:
             self.snake.expand()
 
     def checkFail(self):
-        if not 0 <= self.snake.snake[0].x < cellAmount or not 0 <= self.snake.snake[0].x < cellAmount:
+        if not 0 <= self.snake.snake[0].x < cellAmount or not 0 <= self.snake.snake[0].y < cellAmount:
             pygame.quit()
             sys.exit()
             
