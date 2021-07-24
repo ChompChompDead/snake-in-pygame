@@ -38,8 +38,8 @@ class Fruit:
         self.randomize()
 
     def createFruit(self):
-        fruitShape = pygame.Rect(int(self.position.x * cellSize), int(self.position.y * cellSize), cellSize, cellSize)
-        pygame.draw.rect(screen, (255,65,20), fruitShape)
+        fruit = pygame.image.load("resources/fruit.png")
+        screen.blit(fruit, (self.position.x * cellSize, self.position.y * cellSize))
 
     def randomize(self):
         self.x = random.randint(0, cellAmount - 1)
